@@ -27,9 +27,22 @@ struct PostView: View {
     //Vid 270
     var body: some View {
         //Vid 271
-        Form {
+        VStack {
             TextField("Titulo", text: $titulo)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+            
             TextEditor(text: $contenido)
+                .frame(height: 150)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                .padding()
+            
+            //Vid 273
+            image?
+                .resizable()
+                .scaledToFit()
+                .frame(height: 200)
+                .padding()
             //Vid 274
             Button {
                 //Vid 274,aqui nunca cargamos una imagen y sino mandaremos cuando esocgimos una imagen
@@ -45,17 +58,23 @@ struct PostView: View {
                 image = nil
             } label: {
                 Text("Guardar post")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .shadow(radius: 5)
             }
             //Vid 271, el show inicializa la alerta
             .alert(crud.mensaje, isPresented: $crud.show) {
                 Button("Aceptar", role: .none) {}
             }
-            //Vid 273
-            image?
-                .resizable()
-                .scaledToFit()
+            
+            
             //Vid 271
-        }.navigationTitle("Alta post")
+        }
+        .padding()
+        .navigationTitle("Alta post")
         //Vid 273
             .toolbar{
                 Button {

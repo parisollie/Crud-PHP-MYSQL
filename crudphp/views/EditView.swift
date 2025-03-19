@@ -37,6 +37,12 @@ struct EditView: View {
                 crud.save(titulo: titulo, contenido: contenido, id: crudItem.id, editar: true)
             } label: {
                 Text("Editar post")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .shadow(radius: 5)
             }
 
         }

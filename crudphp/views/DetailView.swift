@@ -10,18 +10,21 @@ import SwiftUI
 struct DetailView: View {
     //Vid 279
     var crudItem : Posts
-    //Vid 280 
+    //Vid 280
     @StateObject var crud = Crud()
     //Vid 281
     @State private var show = false
     
+    //Alerta eliminar
+    @State private var showDeleteAlert = false
+    
     var body: some View {
         VStack(alignment: .center){
-            //Vid 279,ponemos el titulo vacío 
+            //Vid 279,ponemos el titulo vacío
             CeldaView(imagen: crudItem.imagen, titulo: "", contenido: crudItem.contenido)
             HStack(alignment: .center){
                 Button {
-                    //Vid 281 
+                    //Vid 281
                     show.toggle()
                 } label: {
                     Text("Editar")
@@ -29,16 +32,26 @@ struct DetailView: View {
                     .sheet(isPresented: $show) {
                         EditView(crudItem: crudItem)
                     }
-
                 
-                Button {
-                    crud.delete(id: crudItem.id, nombre_imagen: crudItem.nombre_imagen)
-                } label: {
-                    Text("Eliminar")
-                }.buttonStyle(.bordered)
-                    .tint(.red)
-
-            }
+                
+                Button("Eliminar") {
+                    showDeleteAlert.toggle()
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+                .alert("¿Quieres eliminarlo?", isPresented: $showDeleteAlert) {
+                    Button("Cancelar", role: .cancel) {}
+                    Button("Eliminar", role: .destructive) {
+                        crud.delete(id: crudItem.id, nombre_imagen: crudItem.nombre_imagen)
+                    }
+                }
+                
+            }//Fin HStack
+            
+            
+            
+            
+            
             Spacer()
         }.padding(.all)
             .navigationTitle(crudItem.titulo)
