@@ -4,14 +4,13 @@
 //
 //  Created by Paul Jaime Felix Flores on 28/07/24.
 //
-
 import SwiftUI
 
 struct DetailView: View {
     //Vid 279
     var crudItem: Posts
     //Vid 280
-    @StateObject var crud = Crud()
+    @ObservedObject var crud: Crud // Recibe la instancia de Crud desde Home
     
     // Campos de edición
     @State private var titulo = ""
@@ -96,5 +95,6 @@ struct DetailView: View {
                                titulo: "Título de prueba",
                                contenido: "Contenido de prueba",
                                imagen: "imagen_url",
-                               nombre_imagen: "imagen_prueba.jpg"))
+                               nombre_imagen: "imagen_prueba.jpg"),
+               crud: Crud()) // Pasar una instancia de Crud en el preview
 }

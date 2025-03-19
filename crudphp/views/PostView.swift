@@ -4,12 +4,11 @@
 //
 //  Created by Paul Jaime Felix Flores on 28/07/24.
 //
-
 import SwiftUI
 
 struct PostView: View {
     //Vid 270
-    @StateObject var crud = Crud()
+    @ObservedObject var crud: Crud // Recibe la instancia de Crud desde Home
     //Vid 271
     @State private var titulo = ""
     @State private var contenido = ""
@@ -19,8 +18,8 @@ struct PostView: View {
     @State private var image: Image?
     @State private var inputImage: UIImage?
     //Vid 273,funcion para cargar la imagen
-    func loadImage(){
-        guard let inputImage = inputImage else { return  }
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
         //Vid 273,integramos la imagen
         image = Image(uiImage: inputImage)
     }
@@ -61,6 +60,12 @@ struct PostView: View {
                 titulo = ""
                 contenido = ""
                 image = nil
+                
+                // Refrescar la lista de posts en Home
+                crud.getData()
+                
+                // Redirigir a Home después de guardar
+                presentationMode.wrappedValue.dismiss()
             } label: {
                 Text("Guardar post")
                     .padding()
@@ -69,15 +74,6 @@ struct PostView: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
                     .shadow(radius: 5)
-            }
-            //Vid 271, el show inicializa la alerta
-            .alert(crud.mensaje, isPresented: $crud.show) {
-                Button("Aceptar", role: .none) {
-                    // Añadido: Si el mensaje es "Post guardado con éxito", cerramos la vista actual
-                    if crud.mensaje == "Post guardado con exito" {
-                        presentationMode.wrappedValue.dismiss() // Cierra PostView y vuelve a Home
-                    }
-                }
             }
         }
         .padding()
@@ -102,5 +98,7 @@ struct PostView: View {
 }
 
 #Preview {
-    PostView()
+    NavigationView {
+        PostView(crud: Crud()) // Pasar una instancia de Crud en el preview
+    }
 }
