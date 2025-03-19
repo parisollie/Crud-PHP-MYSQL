@@ -12,58 +12,79 @@ struct DetailView: View {
     var crudItem: Posts
     //Vid 280
     @StateObject var crud = Crud()
-    //Vid 281
-    @State private var show = false
+    
+    // Campos de edición
+    @State private var titulo = ""
+    @State private var contenido = ""
     
     //Alerta eliminar
     @State private var showDeleteAlert = false
-    
-    // Nuevo: Bandera para redirigir a Home después de eliminar
-    @State private var redirectToHome = false
     
     // Nuevo: Para regresar a la pantalla anterior
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack(alignment: .center) {
-            //Vid 279,ponemos el titulo vacío
-            CeldaView(imagen: crudItem.imagen, titulo: "", contenido: crudItem.contenido)
+            // Campos de edición
+            TextField("Título", text: $titulo)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .onAppear {
+                    // Inicializar los campos con los valores actuales
+                    titulo = crudItem.titulo
+                    contenido = crudItem.contenido
+                }
+            
+            TextEditor(text: $contenido)
+                .frame(height: 200)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                .padding()
             
             HStack(alignment: .center) {
                 Button {
-                    //Vid 281
-                    show.toggle()
+                    // Guardar cambios
+                    crud.save(titulo: titulo, contenido: contenido, id: crudItem.id, editar: true)
+                    
+                    // Redirigir a Home después de guardar
+                    self.presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Text("Editar")
-                }
-                .buttonStyle(.bordered)
-                .sheet(isPresented: $show) {
-                    EditView(crudItem: crudItem)
+                    Text("Guardar")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 5)
                 }
 
-                Button("Eliminar") {
+                Button {
                     showDeleteAlert.toggle()
+                } label: {
+                    Text("Eliminar")
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 5)
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
                 .alert("¿Quieres eliminarlo?", isPresented: $showDeleteAlert) {
                     Button("Cancelar", role: .cancel) {}
                     Button("Eliminar", role: .destructive) {
-                        // Eliminar el post
                         crud.delete(id: crudItem.id, nombre_imagen: crudItem.nombre_imagen)
-                        
-                        // Nuevo: Redirigir a Home después de eliminar
-                        DispatchQueue.main.async {
-                            self.presentationMode.wrappedValue.dismiss() // Regresa a la pantalla anterior
-                        }
+                        // Redirigir a Home después de eliminar
+                        self.presentationMode.wrappedValue.dismiss()
                     }
                 }
             } // Fin HStack
+            .padding()
             
             Spacer()
         }
         .padding(.all)
-        .navigationTitle(crudItem.titulo)
+        .navigationTitle("Editar Post")
         .alert(crud.mensaje, isPresented: $crud.show) {
             Button("Aceptar", role: .none) {}
         }

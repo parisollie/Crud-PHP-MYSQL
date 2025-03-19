@@ -7,34 +7,38 @@
 
 import SwiftUI
 
-/*struct EditView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}*/
-//vid 281 
+//vid 281
 struct EditView: View {
-    
-    var crudItem : Posts
-    //Vid 282 
+    var crudItem: Posts
+    //Vid 282
     @StateObject var crud = Crud()
-    //Vid 282 
+    //Vid 282
     @State private var titulo = ""
     @State private var contenido = ""
     
+    // Nuevo: Para regresar a la pantalla anterior
+    @Environment(\.presentationMode) var presentationMode
+    
+    // Nuevo: Callback para notificar a DetailView que la edición fue exitosa
+    var onEditSuccess: (() -> Void)?
+    
     var body: some View {
-        Form{
+        Form {
             TextField("Titulo", text: $titulo)
-                .onAppear{
+                .onAppear {
                     titulo = crudItem.titulo
                 }
             TextEditor(text: $contenido)
-                .onAppear{
+                .onAppear {
                     contenido = crudItem.contenido
                 }
             Button {
                 //Vid 282
                 crud.save(titulo: titulo, contenido: contenido, id: crudItem.id, editar: true)
+                
+                // Nuevo: Cerrar EditView y notificar a DetailView
+                self.presentationMode.wrappedValue.dismiss()
+                self.onEditSuccess?()
             } label: {
                 Text("Editar post")
                     .padding()
@@ -44,17 +48,14 @@ struct EditView: View {
                     .cornerRadius(8)
                     .shadow(radius: 5)
             }
-
         }
     }
 }
 
-
 #Preview {
     EditView(crudItem: Posts(id: "1",
-                               titulo: "Título de prueba",
-                               contenido: "Contenido de prueba",
-                               imagen: "imagen_url",
-                               nombre_imagen: "imagen_prueba.jpg"))
+                            titulo: "Título de prueba",
+                            contenido: "Contenido de prueba",
+                            imagen: "imagen_url",
+                            nombre_imagen: "imagen_prueba.jpg"))
 }
-
