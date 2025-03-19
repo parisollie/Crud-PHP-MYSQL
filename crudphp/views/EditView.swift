@@ -51,7 +51,7 @@ struct EditView: View {
 
 
 #Preview {
-    DetailView(crudItem: Posts(id: "1",
+    EditView(crudItem: Posts(id: "1",
                                titulo: "Título de prueba",
                                contenido: "Contenido de prueba",
                                imagen: "imagen_url",

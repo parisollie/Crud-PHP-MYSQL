@@ -24,6 +24,10 @@ struct PostView: View {
         //Vid 273,integramos la imagen
         image = Image(uiImage: inputImage)
     }
+
+    // Añadido: Usamos presentationMode para cerrar la vista actual
+    @Environment(\.presentationMode) var presentationMode
+
     //Vid 270
     var body: some View {
         //Vid 271
@@ -43,16 +47,17 @@ struct PostView: View {
                 .scaledToFit()
                 .frame(height: 200)
                 .padding()
+            
             //Vid 274
             Button {
                 //Vid 274,aqui nunca cargamos una imagen y sino mandaremos cuando esocgimos una imagen
-                //Vid 282 
+                //Vid 282
                 if image == nil {
                     crud.save(titulo: titulo, contenido: contenido, id: "", editar: false)
-                }else{
+                } else {
                     crud.save2(titulo: titulo, contenido: contenido, imagen: inputImage!)
                 }
-                //Vid 271,despues de guardar queremos que todo este vacío 
+                //Vid 271,despues de guardar queremos que todo este vacío
                 titulo = ""
                 contenido = ""
                 image = nil
@@ -67,35 +72,35 @@ struct PostView: View {
             }
             //Vid 271, el show inicializa la alerta
             .alert(crud.mensaje, isPresented: $crud.show) {
-                Button("Aceptar", role: .none) {}
+                Button("Aceptar", role: .none) {
+                    // Añadido: Si el mensaje es "Post guardado con éxito", cerramos la vista actual
+                    if crud.mensaje == "Post guardado con exito" {
+                        presentationMode.wrappedValue.dismiss() // Cierra PostView y vuelve a Home
+                    }
+                }
             }
-            
-            
-            //Vid 271
         }
         .padding()
         .navigationTitle("Alta post")
         //Vid 273
-            .toolbar{
-                Button {
-                    //Vid 273,ponemos la imagen para que se muestre
-                    showImagePIcker = true
-                } label: {
-                    Image(systemName: "camera")
-                }
+        .toolbar {
+            Button {
+                //Vid 273,ponemos la imagen para que se muestre
+                showImagePIcker = true
+            } label: {
+                Image(systemName: "camera")
             }
+        }
         //Vid 273,cuando inputImage cambie ponemos la imagen
-            .onChange(of: inputImage) { _ in
-                loadImage()
-            }.sheet(isPresented: $showImagePIcker) {
-                ImagePicker(image: $inputImage)
-            }
-
-
+        .onChange(of: inputImage) { _ in
+            loadImage()
+        }
+        .sheet(isPresented: $showImagePIcker) {
+            ImagePicker(image: $inputImage)
+        }
     }
 }
 
-#Preview{
+#Preview {
     PostView()
 }
-
