@@ -11,7 +11,7 @@ struct Home: View {
     @StateObject var crud = Crud() // Instancia única de Crud
     
     var body: some View {
-        //Vid 270,
+        //Paso 2.8,
         NavigationView {
             List {
                 //Vid 278,
@@ -25,7 +25,7 @@ struct Home: View {
             //Vid 278
             .navigationTitle("CRUD")
             .listStyle(.plain)
-            //Vid 270,
+            //Paso 2.9
             .toolbar {
                 NavigationLink(destination: PostView(crud: crud)) { // Pasar la instancia de Crud a PostView
                     Image(systemName: "plus")
@@ -53,7 +53,7 @@ struct CeldaView: View {
                     .resizable()
                     .scaledToFit()
             } placeholder: {
-                Color.red
+                Color.purple
             }
             .clipShape(RoundedRectangle(cornerRadius: 25))
             .shadow(radius: 10)

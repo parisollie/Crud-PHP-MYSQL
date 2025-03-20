@@ -5,7 +5,7 @@
 //  Created by Paul Jaime Felix Flores on 28/07/24.
 //
 
-//Vid 277
+//V-277
 import Foundation
 
 struct Posts: Codable {

@@ -8,9 +8,9 @@ import Foundation
 import Alamofire
 import UIKit
 
-//Vid 269
+//V-269
 class Crud: ObservableObject {
-    //Esto nos sirve para saber si guardo correctamente
+    //Paso 2.0,Esto nos sirve para saber si guardo correctamente.
     @Published var mensaje = ""
     @Published var show = false
     //Vid 277,
@@ -18,41 +18,57 @@ class Crud: ObservableObject {
     var urlString = ""
     
     func save(titulo: String, contenido: String, id: String, editar: Bool) {
-        //Vid 269, guardamos nuestros parametros en variables
+        //Paso 2.1, guardamos nuestros parametros en variables
         let parametros: Parameters = [
+            //El nombre debe ser el mismo que esta en el php.
             "titulo": titulo,
             "contenido": contenido,
             "id": id
         ]
+        
         //Vid 282
         if editar {
             urlString = "http://localhost/proyecto/crud/edit.php"
         } else {
             urlString = "http://localhost/proyecto/crud/save.php"
         }
-        //Vid 269, necesitamos nuestra url
+        
+        //Paso 2.2, necesitamos nuestra url
         guard let url = URL(string: urlString) else { return }
-        //Vid 269, cuando trabajamos con internet ponemos un dispatch
+        
+        //Paso 2.3, cuando trabajamos con internet ponemos un dispatch
         DispatchQueue.main.async {
+            //AF es alomo Fire
             AF.request(url, method: .post, parameters: parametros).responseData { response in
-                //Vid 269
+                
+                //Paso 2.4
                 switch response.result {
+                    
                 case .success(let data):
+                    //Paso 2.5
                     do {
+                        //Paso 2.6
                         let json = try JSONSerialization.jsonObject(with: data)
                         let resultadojson = json as! NSDictionary
+                        //Paso 2.7,'respuesta viene de php'
                         guard let res = resultadojson.value(forKey: "respuesta") else { return }
-                        //Vid 271
+                        //print(res)
+                        //print("++++")
+                        //V-271,paso 2.17
                         if res as! String == "success" {
+                            //Paso 2.18
                             self.mensaje = "Post guardado con éxito"
                             self.show = true
-                            self.getData() // Actualizar la lista de posts
+                            // Actualizar la lista de posts
+                            self.getData()
                         } else {
+                            //Paso 2.19
                             self.mensaje = "El post no se pudo guardar"
                             self.show = true
                         }
                     } catch let error as NSError {
                         print("Error en el json", error.localizedDescription)
+                        //Paso 2.20
                         self.mensaje = "El post no se pudo guardar"
                         self.show = true
                     }
@@ -107,12 +123,14 @@ class Crud: ObservableObject {
                 case .success(let data):
                     do {
                         //Vid 277, hacemos la decodificación del Json
+                     
                         let json = try JSONDecoder().decode([Posts].self, from: data)
                         DispatchQueue.main.async {
                             print(json)
                             self.posts = json
                         }
                     } catch let error as NSError {
+                      
                         print("error al mostrar json", error.localizedDescription)
                     }
                 case .failure(let error):
@@ -133,9 +151,11 @@ class Crud: ObservableObject {
         DispatchQueue.main.async {
             AF.request(url, method: .post, parameters: parametros).responseData { response in
                 switch response.result {
+                
+          
                 case .success(let data):
                     do {
-                        //Vid 269
+                      
                         let json = try JSONSerialization.jsonObject(with: data)
                         let resultadojson = json as! NSDictionary
                         guard let res = resultadojson.value(forKey: "respuesta") else { return }
@@ -148,6 +168,7 @@ class Crud: ObservableObject {
                             self.show = true
                         }
                     } catch let error as NSError {
+                        
                         print("Error en el json", error.localizedDescription)
                         self.mensaje = "El post no se pudo eliminar"
                         self.show = true

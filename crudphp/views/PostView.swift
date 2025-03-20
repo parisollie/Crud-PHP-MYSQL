@@ -7,17 +7,17 @@
 import SwiftUI
 
 struct PostView: View {
-    //Vid 270
+    //V-270,paso 2.10
     @ObservedObject var crud: Crud // Recibe la instancia de Crud desde Home
-    //Vid 271
+    //V-271,paso 2.13
     @State private var titulo = ""
     @State private var contenido = ""
-    //Vid 273
+    //V-273
     //Para abrir la libreria
     @State private var showImagePIcker = false
     @State private var image: Image?
     @State private var inputImage: UIImage?
-    //Vid 273,funcion para cargar la imagen
+    //V-273,funcion para cargar la imagen
     func loadImage() {
         guard let inputImage = inputImage else { return }
         //Vid 273,integramos la imagen
@@ -27,9 +27,9 @@ struct PostView: View {
     // Añadido: Usamos presentationMode para cerrar la vista actual
     @Environment(\.presentationMode) var presentationMode
 
-    //Vid 270
+    //Paso 2.10
     var body: some View {
-        //Vid 271
+        //paso 2.14, pone Form
         VStack {
             TextField("Titulo", text: $titulo)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -47,16 +47,17 @@ struct PostView: View {
                 .frame(height: 200)
                 .padding()
             
-            //Vid 274
+            //V-274,paso 2.15
             Button {
-                //Vid 274,aqui nunca cargamos una imagen y sino mandaremos cuando esocgimos una imagen
-                //Vid 282
+                //V-274,aqui nunca cargamos una imagen y sino mandaremos cuando esocgimos una imagen
+                //V-282
                 if image == nil {
+                    //Paso 2.12
                     crud.save(titulo: titulo, contenido: contenido, id: "", editar: false)
                 } else {
                     crud.save2(titulo: titulo, contenido: contenido, imagen: inputImage!)
                 }
-                //Vid 271,despues de guardar queremos que todo este vacío
+                //Paso 2.16,despues de guardar queremos que todo este vacío
                 titulo = ""
                 contenido = ""
                 image = nil
@@ -67,6 +68,7 @@ struct PostView: View {
                 // Redirigir a Home después de guardar
                 presentationMode.wrappedValue.dismiss()
             } label: {
+                //Paso 2.11
                 Text("Guardar post")
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -75,10 +77,15 @@ struct PostView: View {
                     .cornerRadius(8)
                     .shadow(radius: 5)
             }
+            //Paso 2.22
+            .alert(crud.mensaje, isPresented:$crud.show){
+                Button("Aceptar",role:.none){}
+            }
         }
+        //Paso 2.21
         .padding()
         .navigationTitle("Alta post")
-        //Vid 273
+        //V-273
         .toolbar {
             Button {
                 //Vid 273,ponemos la imagen para que se muestre
