@@ -81,48 +81,49 @@ class Crud: ObservableObject {
         }
     }
     
-    //Vid 274, para guardar la imagen
+    //V-274,Paso 3.0 para guardar la imagen
     func save2(titulo: String, contenido: String, imagen: UIImage) {
         let parametros: Parameters = [
             "titulo": titulo,
             "contenido": contenido
         ]
-        
+        //Paso 3.1
         guard let url = URL(string: "http://localhost/proyecto/crud/save.php") else { return }
-        //Vid 274
         guard let imgData = imagen.jpegData(compressionQuality: 1.0) else { return }
-        //Vid 274, nombre de la imagen con la que lo guardaremos
+        //nombre de la imagen con la que lo guardaremos
         let nombreImagen = UUID().uuidString
         
+        //Paso 3.2
         DispatchQueue.main.async {
-            //Vid 274, AF alomofire
+            // AF alomofire
             AF.upload(multipartFormData: { MultipartFormData in
-                //Vid 274, imagen es el nombre con lo que recibiremos en php
+                //imagen es el nombre con lo que recibiremos en php
                 MultipartFormData.append(imgData, withName: "imagen", fileName: "\(nombreImagen).png", mimeType: "image/png")
-                //Vid 274, enviamos los parametros, withName, clave valor
+                //enviamos los parametros, withName, clave valor
                 for (key, val) in parametros {
                     MultipartFormData.append((val as AnyObject).data(using: String.Encoding.utf8.rawValue)!, withName: key)
                 }
-                //Vid 274, la url es nuestra imagen
+                //Paso 3.3,la url es nuestra imagen
             }, to: url, method: .post).uploadProgress { Progress in
-                //Vid 274, para poder el progreso en la terminal y multiplicamos por 100 para ver el porcentaje
+                //para poder el progreso en la terminal y multiplicamos por 100 para ver el porcentaje
                 print(Progress.fractionCompleted * 100)
             }.response { response in
                 self.mensaje = "Post guardado con éxito"
                 self.show = true
-                self.getData() // Actualizar la lista de posts
+                // Actualizar la lista de posts
+                self.getData()
             }
         }
     }
     
-    //Vid 277, conseguimos los datos de select de php
+    //V-277, conseguimos los datos de select de php
     func getData() {
         AF.request("http://localhost/proyecto/crud/select.php")
             .responseData { response in
                 switch response.result {
                 case .success(let data):
                     do {
-                        //Vid 277, hacemos la decodificación del Json
+                        //hacemos la decodificación del Json
                      
                         let json = try JSONDecoder().decode([Posts].self, from: data)
                         DispatchQueue.main.async {
@@ -139,7 +140,7 @@ class Crud: ObservableObject {
             }
     }
     
-    //Vid 280, eliminar el post
+    //V-280, eliminar el post
     func delete(id: String, nombre_imagen: String) {
         let parametros: Parameters = [
             "id": id,

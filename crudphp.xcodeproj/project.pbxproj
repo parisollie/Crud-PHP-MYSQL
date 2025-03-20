@@ -73,10 +73,8 @@
 				9BAAFCF72C5764B300156E22 /* models */,
 				9BAAFCF62C5764A800156E22 /* views */,
 				9BAAFCE52C57628D00156E22 /* crudphpApp.swift */,
-				9BAAFCE72C57628D00156E22 /* ContentView.swift */,
 				9BAAFCE92C57628F00156E22 /* Assets.xcassets */,
 				9BAAFCEB2C57628F00156E22 /* Preview Content */,
-				9BAAFD062C5769A900156E22 /* ImagePicker.swift */,
 			);
 			path = crudphp;
 			sourceTree = "<group>";
@@ -94,6 +92,7 @@
 			children = (
 				9BAAFCFA2C57657A00156E22 /* Home.swift */,
 				9BAAFCFC2C57659B00156E22 /* PostView.swift */,
+				9BAAFCE72C57628D00156E22 /* ContentView.swift */,
 				9BAAFCFE2C5765AE00156E22 /* EditView.swift */,
 				9BAAFD002C5765C300156E22 /* DetailView.swift */,
 			);
@@ -103,6 +102,7 @@
 		9BAAFCF72C5764B300156E22 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				9BAAFD062C5769A900156E22 /* ImagePicker.swift */,
 				9BAAFD022C57662100156E22 /* posts.swift */,
 			);
 			path = models;
