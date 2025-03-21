@@ -7,39 +7,42 @@
 import SwiftUI
 
 struct Home: View {
-    //Vid 277,
-    @StateObject var crud = Crud() // Instancia única de Crud
+    //Paso 4.5
+    @StateObject var crud = Crud()
     
     var body: some View {
         //Paso 2.8,
         NavigationView {
             List {
-                //Vid 278,
+                //Paso 4.8
                 ForEach(crud.posts, id: \.id) { item in
-                    //Vid 279
+                    //V-279,paso 4.14, para dirigirnos a Detail
                     NavigationLink(destination: DetailView(crudItem: item, crud: crud)) {
+                        //Paso 4.9
                         CeldaView(imagen: item.imagen, titulo: item.titulo, contenido: item.contenido)
                     }
                 }
             }
-            //Vid 278
+            //Paso 4.10
             .navigationTitle("CRUD")
+            //Para que no aparezca el recuadro
             .listStyle(.plain)
             //Paso 2.9
             .toolbar {
                 NavigationLink(destination: PostView(crud: crud)) { // Pasar la instancia de Crud a PostView
                     Image(systemName: "plus")
                 }
-                //Vid 277,
             }
+            //V-277,Paso 4.4
             .onAppear {
+                //paso 4.6
                 crud.getData() // Refrescar datos al aparecer
             }
         }
     }
 }
 
-//Vid 278, celda para mostrar las imagenes
+//V-278,paso 4.7 celda para mostrar las imagenes
 struct CeldaView: View {
     var imagen: String
     var titulo: String

@@ -13,10 +13,12 @@ class Crud: ObservableObject {
     //Paso 2.0,Esto nos sirve para saber si guardo correctamente.
     @Published var mensaje = ""
     @Published var show = false
-    //Vid 277,
+    //Paso 4.2
     @Published var posts = [Posts]()
+    //paso 6.1
     var urlString = ""
     
+    //V-282,Paso 6.0,add  id: String, editar: Bool
     func save(titulo: String, contenido: String, id: String, editar: Bool) {
         //Paso 2.1, guardamos nuestros parametros en variables
         let parametros: Parameters = [
@@ -26,7 +28,7 @@ class Crud: ObservableObject {
             "id": id
         ]
         
-        //Vid 282
+        //Paso 6.2
         if editar {
             urlString = "http://localhost/proyecto/crud/edit.php"
         } else {
@@ -116,22 +118,22 @@ class Crud: ObservableObject {
         }
     }
     
-    //V-277, conseguimos los datos de select de php
+    //V-277,Paso 4.1 conseguimos los datos de select de php
     func getData() {
         AF.request("http://localhost/proyecto/crud/select.php")
             .responseData { response in
                 switch response.result {
                 case .success(let data):
+                    
                     do {
                         //hacemos la decodificación del Json
-                     
                         let json = try JSONDecoder().decode([Posts].self, from: data)
                         DispatchQueue.main.async {
+                            //paso 4.3
                             print(json)
                             self.posts = json
                         }
                     } catch let error as NSError {
-                      
                         print("error al mostrar json", error.localizedDescription)
                     }
                 case .failure(let error):
@@ -140,7 +142,7 @@ class Crud: ObservableObject {
             }
     }
     
-    //V-280, eliminar el post
+    //V-280,Paso 4.16 eliminar el post
     func delete(id: String, nombre_imagen: String) {
         let parametros: Parameters = [
             "id": id,
@@ -163,7 +165,8 @@ class Crud: ObservableObject {
                         if res as! String == "success" {
                             self.mensaje = "Post eliminado con éxito"
                             self.show = true
-                            self.getData() // Actualizar la lista de posts
+                            // Actualizar la lista de posts
+                            self.getData()
                         } else {
                             self.mensaje = "El post no se pudo eliminar"
                             self.show = true

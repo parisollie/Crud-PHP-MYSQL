@@ -54,6 +54,7 @@ struct PostView: View {
                 //V-282
                 if image == nil {
                     //Paso 2.12
+                    //Paso 6.3, ponemos el editar
                     crud.save(titulo: titulo, contenido: contenido, id: "", editar: false)
                 } else {
                     crud.save2(titulo: titulo, contenido: contenido, imagen: inputImage!)

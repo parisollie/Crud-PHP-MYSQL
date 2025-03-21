@@ -7,10 +7,10 @@
 import SwiftUI
 
 struct DetailView: View {
-    //Vid 279
+    //V-279,paso 4.11
     var crudItem: Posts
-    //Vid 280
-    @ObservedObject var crud: Crud // Recibe la instancia de Crud desde Home
+    //V-280,Paso 4.15 ,Recibe la instancia de Crud desde Home
+    @ObservedObject var crud: Crud
     
     // Campos de edición
     @State private var titulo = ""
@@ -41,9 +41,10 @@ struct DetailView: View {
                 .cornerRadius(8)
                 .padding()
             
+            //Paso 4.12,botnones
             HStack(alignment: .center) {
                 Button {
-                    // Guardar cambios
+                    //Paso 6.4, Guardar cambios
                     crud.save(titulo: titulo, contenido: contenido, id: crudItem.id, editar: true)
                     
                     // Redirigir a Home después de guardar
@@ -72,6 +73,7 @@ struct DetailView: View {
                 .alert("¿Quieres eliminarlo?", isPresented: $showDeleteAlert) {
                     Button("Cancelar", role: .cancel) {}
                     Button("Eliminar", role: .destructive) {
+                        //Paso 4.17
                         crud.delete(id: crudItem.id, nombre_imagen: crudItem.nombre_imagen)
                         // Redirigir a Home después de eliminar
                         self.presentationMode.wrappedValue.dismiss()
@@ -82,6 +84,7 @@ struct DetailView: View {
             
             Spacer()
         }
+        //Paso 4.13
         .padding(.all)
         .navigationTitle("Editar Post")
         .alert(crud.mensaje, isPresented: $crud.show) {

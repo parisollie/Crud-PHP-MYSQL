@@ -10,10 +10,10 @@ import SwiftUI
 /*vid 281
 struct EditView: View {
     var crudItem: Posts
-    //Vid 282
+    //V-282,paso 5.1
     @ObservedObject var crud: Crud // Recibe la instancia de Crud desde Home
     
-    //Vid 282
+    //Paso 5.2
     @State private var titulo = ""
     @State private var contenido = ""
     
@@ -24,8 +24,10 @@ struct EditView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
+        //Paso 5.3
         Form {
             TextField("Titulo", text: $titulo)
+               
                 .onAppear {
                     titulo = crudItem.titulo
                     contenido = crudItem.contenido
@@ -33,7 +35,7 @@ struct EditView: View {
                 .onChange(of: titulo) { _ in
                     checkForChanges()
                 }
-            
+            //Paso 5.4
             TextEditor(text: $contenido)
                 .onAppear {
                     contenido = crudItem.contenido
@@ -43,12 +45,13 @@ struct EditView: View {
                 }
             
             Button {
-                //Vid 282
+                //V-282,paso 6.4
                 crud.save(titulo: titulo, contenido: contenido, id: crudItem.id, editar: true)
                 
                 // Nuevo: Cerrar EditView y notificar a DetailView
                 self.presentationMode.wrappedValue.dismiss()
             } label: {
+                //Paso 5.0
                 Text("Editar post")
                     .padding()
                     .frame(maxWidth: .infinity)

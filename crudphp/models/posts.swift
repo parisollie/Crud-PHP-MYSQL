@@ -7,7 +7,7 @@
 
 //V-277
 import Foundation
-
+//Paso 4.0
 struct Posts: Codable {
     let id : String
     let titulo : String
